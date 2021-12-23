@@ -22,6 +22,9 @@ module.exports = {
   },
   output: {
     filename: 'cards.lib.js',
+    library:"cards",
+    libraryTarget: "umd",
+    umdNamedDefine: true,
     path: path.resolve(__dirname, 'dist'),
   },
 };
