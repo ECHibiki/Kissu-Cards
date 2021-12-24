@@ -1,4 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Cookie");
+@import 'https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap';
+
 audio::-webkit-media-controls-mute-button { display: none !important; } audio::-webkit-media-controls-volume-slider { display: none !important; }
 audio{
   width: 260px;  overflow: hidden;  direction: ltl;  border-top-right-radius: 0.5em 0.5em;  border-bottom-right-radius: 1em 0.7em;
+}
+
+* {
+  font-family: Cookie;
+}
+
+h1 {
+  font-family: Mountains of Christmas;
 }

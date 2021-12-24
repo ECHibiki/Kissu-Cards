@@ -3,12 +3,15 @@ import ParticleVShader from './glsl/ParticleVShader.vs'
 import BloomFShader from './glsl/BloomFShader.fs'
 import PostBloomFShader from './glsl/PostBloomFShader.fs'
 import TextureFShader from './glsl/TextureFShader.fs'
+
 import * as glm from "gl-matrix"
 import * as shaders from "./shaders"
 import * as buffers from "./buffers"
 import * as textures from "./textures"
 import * as emitters from "./particle-emitters"
 import * as audio from "./audio-analysis"
+import * as text from "./text-processor"
+import * as cardbuilder from "./card-builder"
 
 var gl:WebGL2RenderingContext;
 
@@ -22,8 +25,12 @@ export function helloWorld(){
   console.log("-_active_-");
 }
 
-export function setGLInstance(gl:WebGL2RenderingContext){
-  gl = gl;
+export function buildTagFromParams(container:any, search_obj:URLSearchParams ){
+  text.buildTagFromSearchField(container , search_obj);
+}
+
+export function setGLInstance(_gl:WebGL2RenderingContext){
+  gl = _gl;
 }
 
 export function clearScreen(){
@@ -53,6 +60,9 @@ export function createParticleEmitter(settings:emitters.ParticleSettings){
 export function moveParticles(particle_properties:emitters.ParticleObject[]){
   return emitters.moveParticles(particle_properties);
 }
+export function setGravity(g:number){
+  emitters.setGravity(g);
+}
 export function assessBandVolumes(frequency_profile: Uint8Array){
   return audio.assessBandVolumes(frequency_profile);
 }
@@ -60,7 +70,9 @@ export function initAudio(audio_element:any) : any{
   return audio.initAudio(audio_element);
 }
 // very simple construction function. Around only because all the current cards are identical in function and customizable with a few variables
-export function buildCard(image_src:string, particle_src:string, width:number, height:number , audio_band:number, bloom_low_color:glm.vec3 , bloom_high_color:glm.vec3 ,
-particle_audio_threshold:number){
-
+export function buildCard(...args:any){
+  cardbuilder.init.apply(false, args);
+}
+export function buildTag(...args:any){
+  cardbuilder.buildTag.apply(false, args);
 }

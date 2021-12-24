@@ -112,7 +112,12 @@ export function createFrameBuffer(gl:WebGL2RenderingContext , height:number, wid
   gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
 
   return {
-   texture: texture,
+   texture: {
+     set: function(texture_num:number){
+       gl.activeTexture( gl.TEXTURE0 + texture_num );
+       gl.bindTexture( gl.TEXTURE_2D, texture );
+     }
+   },
    buffer: buffer,
    enable: function(){
      gl.bindFramebuffer(gl.FRAMEBUFFER, buffer);

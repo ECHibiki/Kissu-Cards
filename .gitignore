@@ -1,6 +1,7 @@
 *.html
 *.jpeg
 *.jpg
+*.ico
 *.png
 *.mp3
 /node_modules/*

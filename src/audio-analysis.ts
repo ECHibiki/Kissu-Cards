@@ -19,14 +19,14 @@ export function assessBandVolumes(frequency_profile: Uint8Array) {
   const DIVISIONS = 170;
   var len = frequency_profile.length; // add in a manual frequency cuttoff since certain ranges are empty
   var max_bands = Math.ceil(len / DIVISIONS);
-  var bands = new Array(max_bands);
+  var bands = new Array(max_bands).fill(0);
   var empty_point = 0;
   for (var fq = 0; fq < len; fq++) {
     bands[Math.floor(fq / DIVISIONS)] += frequency_profile[fq];
   }
-  for (var band_no = 0; band_no < 6; band_no++) {
+  for (var band_no = 0; band_no < max_bands; band_no++) {
     // average of each band then normalized
-    bands[band_no] = bands[band_no] / max_bands / 256;
+    bands[band_no] = bands[band_no] / DIVISIONS / 256;
   }
   return bands;
 }

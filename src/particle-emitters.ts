@@ -1,6 +1,6 @@
 import * as glm from "gl-matrix"
 
-const GRAVITY = -0.001;
+var gravity = -0.001
 
 export interface ParticleObject {
   location: glm.vec4 , // where it is now
@@ -23,6 +23,10 @@ interface AdditionalSettings{
   velocity_mod?:number ;
   additional_position?: glm.vec4 ;
   expiration?: number ;
+}
+
+export function setGravity(g:number){
+  gravity = g;
 }
 
 export function createEmitter(emitter_settings:ParticleSettings){
@@ -134,7 +138,7 @@ export function createEmitter(emitter_settings:ParticleSettings){
       }
       particle_properties[index].rotation += particle_properties[index].rotational_velocity;
       glm.vec4.add(particle_properties[index].location , particle_properties[index].location, particle_properties[index].velocity);
-      glm.vec4.add(particle_properties[index].velocity , particle_properties[index].velocity, glm.vec4.fromValues(0.0, GRAVITY, 0.0, 0.0));
+      glm.vec4.add(particle_properties[index].velocity , particle_properties[index].velocity, glm.vec4.fromValues(0.0, gravity, 0.0, 0.0));
     });
     removal_indices.reverse().forEach(function(indice:number){
       particle_properties.splice(indice , 1);

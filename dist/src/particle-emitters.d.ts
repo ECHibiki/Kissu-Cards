@@ -19,6 +19,7 @@ interface AdditionalSettings {
     additional_position?: glm.vec4;
     expiration?: number;
 }
+export declare function setGravity(g: number): void;
 export declare function createEmitter(emitter_settings: ParticleSettings): {
     createParticles: (quanitity: number, additional_obj: AdditionalSettings) => ParticleObject[];
 };

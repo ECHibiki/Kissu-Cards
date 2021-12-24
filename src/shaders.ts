@@ -8,8 +8,8 @@ export interface ShaderObj{
 }
 
 export function createShaderProgram(gl:WebGL2RenderingContext , vshader:string , fshader:string, error_name:string) : WebGLProgram{
-  const vertex_shader = loadShader(gl, gl.VERTEX_SHADER, vshader);
-  const fragment_shader = loadShader(gl, gl.FRAGMENT_SHADER, fshader);
+  const vertex_shader = loadShader(gl, gl.VERTEX_SHADER, vshader , error_name);
+  const fragment_shader = loadShader(gl, gl.FRAGMENT_SHADER, fshader , error_name);
 
 // Create the shader program
   const shader_program = gl.createProgram();
@@ -24,6 +24,7 @@ export function createShaderProgram(gl:WebGL2RenderingContext , vshader:string ,
     );
     return null;
   }
+  var shader_this = this;
   return {
     shader_variables: {
       uniforms: {},
@@ -31,9 +32,9 @@ export function createShaderProgram(gl:WebGL2RenderingContext , vshader:string ,
      },
     program: shader_program,
     use: function(){
-
+      gl.useProgram(this.program);
     },
-    uniform:function( unifomFn:(var_location: WebGLUniformLocation , args:any ) => void , name:string , ...uniform_args:any[] ) {
+    uniformSetter:function( unifomFn:( location:WebGLUniformLocation  ) => void , name:string  ) {
       var variable_reference:WebGLUniformLocation;
       if(this.shader_variables.uniforms[name]){
         variable_reference = this.shader_variables.uniforms[name];
@@ -41,10 +42,9 @@ export function createShaderProgram(gl:WebGL2RenderingContext , vshader:string ,
         variable_reference = gl.getUniformLocation(this.program , name);
         this.shader_variables.uniforms[name] = variable_reference;
       }
-
-      unifomFn(variable_reference , uniform_args);
+      return unifomFn( variable_reference );
     },
-    attributeLocation:function(name:string){
+    attributeLocation:function (name:string) {
       var variable_reference:GLint;
       if(this.shader_variables.attributes[name]){
         variable_reference = this.shader_variables.attributes[name];
@@ -52,19 +52,19 @@ export function createShaderProgram(gl:WebGL2RenderingContext , vshader:string ,
         variable_reference = gl.getAttribLocation(this.program , name);
         this.shader_variables.attributes[name] = variable_reference;
       }
-      return
+      return variable_reference;
     }
   }
 }
 
-function loadShader(gl:WebGL2RenderingContext , type:number , shader_code:string){
+function loadShader(gl:WebGL2RenderingContext , type:number , shader_code:string, error_name?:string){
   const shader = gl.createShader(type);
   gl.shaderSource(shader, shader_code);
   gl.compileShader(shader);
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     alert(
-      "An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader)
+      "An error occurred compiling the shaders " + error_name +": " + gl.getShaderInfoLog(shader)
     );
     gl.deleteShader(shader);
     return null;
