@@ -12,9 +12,10 @@ export function buildTagFromSearchField(container:any , search_obj:URLSearchPara
   let from = sanitizeText(search_obj.get("from"));
   let to = sanitizeText(search_obj.get("to"));
   let message = sanitizeText(search_obj.get("m"));
-  container.innerHtml = `
-  <span class="sender">From: <span class="styled sender">${from}</span></span>
-  <span class="reciever">To: <span class="styled reciever">${from}</span></span>
-  <span class="message">${message}</span>
+  console.log(container);
+  container.innerHTML = `
+  <span id="sender" class="message-item">From: <span class="styled from">${from}</span></span>
+  <span id="reciever" class="message-item">To: <span class="styled to">${to}</span></span>
+  <span id="message" class="message-item">${message}</span>
   `;
 }

@@ -1,2 +1,2 @@
-export declare function init(image_src: string, particle_src: string, width: number, height: number, bloom_audio_band: number, bloom_color_range: Float32Array[], particle_threshold: number, gravity: number): void;
+export declare function init(image_src: string, particle_src: string, width: number, height: number, bloom_audio_band: number, bloom_color_range: Float32Array[], bloom_mul: number, bloom_quality: number, particle_threshold: number, particle_click_vel: number, particle_scaling: number, snowfall_delay: number, wind_band: number, wind_x_mod: number, wind_y_mod: number, particle_rotation_mod: number, gravity: number): void;
 export declare function buildTag(container_id: string, search_string: string): void;

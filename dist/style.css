@@ -3,13 +3,89 @@
 
 audio::-webkit-media-controls-mute-button { display: none !important; } audio::-webkit-media-controls-volume-slider { display: none !important; }
 audio{
-  width: 260px;  overflow: hidden;  direction: ltl;  border-top-right-radius: 0.5em 0.5em;  border-bottom-right-radius: 1em 0.7em;
+  width: 215px;  overflow: hidden;  direction: ltl;  border-top-right-radius: 0.5em 0.5em;  border-bottom-right-radius: 1em 0.7em;
 }
 
 * {
-  font-family: Cookie;
+  font-family: Cookie , cursive;
+  color:#5e0000
 }
 
 h1 {
-  font-family: Mountains of Christmas;
+    font-family: Mountains of Christmas , cursive;
+    font-weight: bold;
+    font-size: 12vw;
+    margin: auto;
+    text-align: center;
+    background: #ade0b3c2;
+    border-radius: 9px;
+    color: #db5858;
+    text-shadow: 1px 1px 9px #32b1b7b5;
+    background-image: url(/images/NicePng_sprinkles-png_1499824.png);
+    background-blend-mode: color-dodge;
+}
+
+canvas{
+  width:100%;
+}
+
+small {
+  display:block;
+  font-family:verdana;
+}
+
+html{
+  background-image: url('/images/1575857147054.png');
+  background-color: #acdcae;
+}
+
+.attr {
+  background: #dfdddd;
+  border: 1px solid #e68080;
+  display: inline-block;
+  padding: 4px 12px;
+}
+#external-container {
+    background: #ee515178;
+        background-position-x: 0%;
+        background-image: none;
+        background-size: auto;
+    background-image: url(/images/4403048.png);
+    width: 100%;
+    height: 230px;
+    background-size: contain;
+    border-radius: 41px;
+    border: 1px solid #f0e5e5;
+    max-width: 100%;
+    margin: auto;
+    position: relative;
+    opacity: 0.8;
+    background-position-x: 62px;
+    display:block;
+}
+#message-container {
+    text-align: center;
+    font-size: 52px;
+    padding-top: 5px;
+    color: #e11eb0;
+    display: block;
+    margin: auto;
+    position: relative;
+    background: linear-gradient(to left, #ff0000c9, #e6078edb);
+    height: 98%;
+    border-radius: 40px;
+}
+
+.message-item {
+    color: #5ae663;
+    display: block;
+    font-size:37px;
+}
+.styled {
+    color: #ececec;
+    font-size: 69px;
+}
+#message {
+    color: white;
+    font-size: 29px;
 }

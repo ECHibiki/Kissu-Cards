@@ -19,10 +19,13 @@ export interface ParticleSettings{
   inverse_normal:boolean
 }
 
-interface AdditionalSettings{
-  velocity_mod?:number ;
+export interface AdditionalSettings{
+  velocity_mod?:number[] ;
+  wind_mod?:number[] ;
   additional_position?: glm.vec4 ;
   expiration?: number ;
+  scaling?:number;
+  rotation?:number;
 }
 
 export function setGravity(g:number){
@@ -98,28 +101,37 @@ export function createEmitter(emitter_settings:ParticleSettings){
         if(!additional_obj){
           additional_obj = {};
         }
-        var new_particles = [
-          // {
-          //    location: , // where it is now
-          //    velocity:, // how fast it is moving
-          //    expires: , // a value showing how many miliseconds it has left to live
-          //    rotational_velocity: , // how it's rotating
-          //    rotation: , //rotational position
-          //    scaling:  // how big it is
-          //  }
-        ];
+        var new_particles = [  ];
         for (var p = 0 ; p < quanitity ; p++){
           var arc_rand = Math.random();
-          var velocity_rand = Math.random() * 0.125 * (additional_obj.velocity_mod != undefined ? additional_obj.velocity_mod : 1.0);
+          var velocity_x = 0;
+          var velocity_y = 0;
+
+          if(additional_obj.velocity_mod){
+            velocity_x = Math.random() * (additional_obj.velocity_mod[0] );
+            velocity_y = Math.random() * (additional_obj.velocity_mod[1] ) ;
+          }
+          else{
+            velocity_x = Math.random() * ((0.125) - 0.0025) + 0.0025;
+            velocity_y = Math.random() * ((0.125) - 0.0025) + 0.0025;
+          }
+          var vel_rand = glm.vec4.fromValues(velocity_x, velocity_y , 0.0, 0.0);
+          glm.vec4.multiply(vel_rand , normal_vector_fn(arc_rand)  , vel_rand );
+          if(additional_obj.wind_mod){
+            glm.vec4.add(vel_rand , vel_rand  , glm.vec4.fromValues(
+              additional_obj.wind_mod[0] * (INVERSE_NORMALS ? -1 : 1)
+             , additional_obj.wind_mod[1] * (INVERSE_NORMALS ? -1 : 1) , 0.0 , 0.0 ) );
+          }
+
           var particle_location = glm.vec4.create();
           new_particles.push(
           {
              location: (additional_obj.additional_position ? glm.vec4.add(particle_location , emission_fn(arc_rand) , additional_obj.additional_position ) : emission_fn(arc_rand)), // where it is now
-             velocity: glm.vec4.multiply(normal_vector_fn(arc_rand) , normal_vector_fn(arc_rand)  , glm.vec4.fromValues(velocity_rand , velocity_rand , 0.0 , 0.0) ) , // how fast it is moving
+             velocity:  vel_rand, // how fast it is moving
              expires: Date.now() +  (additional_obj.expiration ? additional_obj.expiration :  5000), // a value showing how many miliseconds it has left to live
-             rotational_velocity: Math.random() * Math.PI / 20, // how it's rotating
+             rotational_velocity: (Math.random() * (Math.PI / 20 + Math.PI / 20 ) - Math.PI / 20 )* (additional_obj.rotation ? additional_obj.rotation : 1.0), // how it's rotating
              rotation: Math.random() * 2 * Math.PI, //rotational position
-             scaling:  Math.random() * (0.1 - 0.01) + 0.01
+             scaling:  Math.random() * ((additional_obj.scaling != undefined ? additional_obj.scaling : 0.08) - 0.02) + 0.02
            });
         }
 
@@ -128,7 +140,7 @@ export function createEmitter(emitter_settings:ParticleSettings){
     }
   }
 
-  export function moveParticles(particle_properties:ParticleObject[]){
+  export function moveParticles(particle_properties:ParticleObject[] , additional_obj: AdditionalSettings){
     var removal_indices:number[] = [];
     var skip_count = particle_properties.length - 500000;
     particle_properties.forEach(function(particle:ParticleObject, index:number) {
@@ -138,7 +150,10 @@ export function createEmitter(emitter_settings:ParticleSettings){
       }
       particle_properties[index].rotation += particle_properties[index].rotational_velocity;
       glm.vec4.add(particle_properties[index].location , particle_properties[index].location, particle_properties[index].velocity);
-      glm.vec4.add(particle_properties[index].velocity , particle_properties[index].velocity, glm.vec4.fromValues(0.0, gravity, 0.0, 0.0));
+      glm.vec4.add(particle_properties[index].velocity,
+        particle_properties[index].velocity, glm.vec4.fromValues(
+          -1 * (additional_obj.wind_mod ? additional_obj.wind_mod[0] : 0.0),
+          gravity - (additional_obj.wind_mod ? additional_obj.wind_mod[1] : 0.0) , 0.0, 0.0));
     });
     removal_indices.reverse().forEach(function(indice:number){
       particle_properties.splice(indice , 1);

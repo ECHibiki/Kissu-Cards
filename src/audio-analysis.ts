@@ -16,7 +16,7 @@ export function initAudio(audio_element:any) : any{
 }
 
 export function assessBandVolumes(frequency_profile: Uint8Array) {
-  const DIVISIONS = 170;
+  const DIVISIONS = 114;
   var len = frequency_profile.length; // add in a manual frequency cuttoff since certain ranges are empty
   var max_bands = Math.ceil(len / DIVISIONS);
   var bands = new Array(max_bands).fill(0);
@@ -28,5 +28,17 @@ export function assessBandVolumes(frequency_profile: Uint8Array) {
     // average of each band then normalized
     bands[band_no] = bands[band_no] / DIVISIONS / 256;
   }
+  document.getElementById("message-container").innerHTML = `
+  0 - ${bands[0]}<br/>
+  1 - ${bands[1]}<br/>
+  2 - ${bands[2]}<br/>
+  3 - ${bands[3]}<br/>
+  4 - ${bands[4]}<br/>
+  5 - ${bands[5]}<br/>
+  6 - ${bands[6]}<br/>
+  7 - ${bands[7]}<br/>
+  8 - ${bands[8]}<br/>
+  ${bands.reduce(function(a, b){ return a+b })}<br/>
+  `;
   return bands;
 }

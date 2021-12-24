@@ -3,6 +3,7 @@ in mediump vec2 out_texture_coord;
 
 uniform sampler2D image;
 uniform bool lr_blur;
+uniform bool isolate;
 
 uniform mediump vec3 low_bloom_color;
 uniform mediump vec3 high_bloom_color;
@@ -11,10 +12,11 @@ out mediump vec4 output_fragment_color;
 
 mediump float blur_weights[5] = float[5](0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 
+// DO NOT ISOLATE AFTER FIRST LOOP OF COLOR REMOVAL
 lowp float usablePixel(mediump vec3 pixel_rgb){
   lowp vec3 use_low_rgb = step( -0.1 , pixel_rgb - low_bloom_color);
   lowp vec3 use_high_rgb = 1.0 - step( 0.1 , pixel_rgb - high_bloom_color);
-  return step( 1.0 ,  use_high_rgb[0] * use_high_rgb[1] * use_high_rgb[2] * use_low_rgb[0] * use_low_rgb[1] * use_low_rgb[2] )  ;
+  return step( 1.0 ,  use_high_rgb[0] * use_high_rgb[1] * use_high_rgb[2] * use_low_rgb[0] * use_low_rgb[1] * use_low_rgb[2] + float(!isolate) )  ;
 }
 void main(void) {
   // isolate brighter than orange shade (clamp interval)
@@ -34,5 +36,5 @@ void main(void) {
           result +=  usablePixel(mx) * mx * blur_weights[i] * float(lr_blur)
           + usablePixel(my) * my * blur_weights[i] * float(!lr_blur);
     }
-    output_fragment_color = vec4(result , 1.0);
+  output_fragment_color = vec4(result , 1.0);
 }

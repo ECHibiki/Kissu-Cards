@@ -57,8 +57,8 @@ export function loadTexture(image_src:string){
 export function createParticleEmitter(settings:emitters.ParticleSettings){
   return emitters.createEmitter(settings);
 }
-export function moveParticles(particle_properties:emitters.ParticleObject[]){
-  return emitters.moveParticles(particle_properties);
+export function moveParticles(particle_properties:emitters.ParticleObject[] , settings:emitters.AdditionalSettings){
+  return emitters.moveParticles(particle_properties , settings);
 }
 export function setGravity(g:number){
   emitters.setGravity(g);

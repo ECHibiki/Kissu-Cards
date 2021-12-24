@@ -14,14 +14,16 @@ export interface ParticleSettings {
     length: number;
     inverse_normal: boolean;
 }
-interface AdditionalSettings {
-    velocity_mod?: number;
+export interface AdditionalSettings {
+    velocity_mod?: number[];
+    wind_mod?: number[];
     additional_position?: glm.vec4;
     expiration?: number;
+    scaling?: number;
+    rotation?: number;
 }
 export declare function setGravity(g: number): void;
 export declare function createEmitter(emitter_settings: ParticleSettings): {
     createParticles: (quanitity: number, additional_obj: AdditionalSettings) => ParticleObject[];
 };
-export declare function moveParticles(particle_properties: ParticleObject[]): ParticleObject[];
-export {};
+export declare function moveParticles(particle_properties: ParticleObject[], additional_obj: AdditionalSettings): ParticleObject[];
